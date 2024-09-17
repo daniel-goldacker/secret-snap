@@ -1,0 +1,91 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "description": "API para ocultar e extrair mensagens secretas de imagens usando esteganografia.",
+      "version": "1.0.0",
+      "title": "secret-snap"
+    },
+    "host": "127.0.0.1:5000",
+    "basePath": "/",
+    "tags": [
+      {
+        "name": "Encoding",
+        "description": "Operações relacionadas à codificação de mensagens."
+      },
+      {
+        "name": "Decoding",
+        "description": "Operações relacionadas à decodificação de mensagens."
+      }
+    ],
+    "paths": {
+      "/encode": {
+        "post": {
+          "tags": ["Encoding"],
+          "summary": "Ocultar uma mensagem em uma imagem",
+          "description": "Codifica uma mensagem secreta em uma imagem.",
+          "consumes": ["multipart/form-data"],
+          "produces": ["image/png"],
+          "parameters": [
+            {
+              "name": "file",
+              "in": "formData",
+              "type": "file",
+              "required": true,
+              "description": "A imagem onde a mensagem será escondida."
+            },
+            {
+              "name": "message",
+              "in": "formData",
+              "type": "string",
+              "required": true,
+              "description": "A mensagem a ser codificada."
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Imagem com a mensagem codificada."
+            },
+            "400": {
+              "description": "Requisição inválida. A mensagem é muito longa ou o arquivo está faltando."
+            }
+          }
+        }
+      },
+      "/decode": {
+        "post": {
+          "tags": ["Decoding"],
+          "summary": "Extrair uma mensagem de uma imagem",
+          "description": "Decodifica uma mensagem oculta de uma imagem.",
+          "consumes": ["multipart/form-data"],
+          "produces": ["application/json"],
+          "parameters": [
+            {
+              "name": "file",
+              "in": "formData",
+              "type": "file",
+              "required": true,
+              "description": "A imagem de onde a mensagem será extraída."
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Mensagem decodificada da imagem.",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "A mensagem oculta."
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Requisição inválida. O arquivo não pôde ser processado."
+            }
+          }
+        }
+      }
+    }
+  }
+  
